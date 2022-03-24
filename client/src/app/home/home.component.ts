@@ -1,6 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { subscribeOn } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -8,24 +7,19 @@ import { subscribeOn } from 'rxjs/operators';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  registerMode= false;
-  // users: any;
-  // constructor(private http: HttpClient){}
-  constructor(){}
+  registerMode = false;
+
+  constructor() { }
 
   ngOnInit(): void {
-    // this.getUsers();
   }
 
-  registerToggle(){
-    this.registerMode= !this.registerMode;
-    
+  registerToggle() {
+    this.registerMode = !this.registerMode;
   }
-  // getUsers(){
-  //   this.http.get('https://localhost:5001/api/users').subscribe(users=> this.users=users);
-  // }
 
-  cancelRegisterMode(event:boolean){
-    this.registerMode=event;
+  cancelRegisterMode(event: boolean) {
+    this.registerMode = event;
   }
+
 }

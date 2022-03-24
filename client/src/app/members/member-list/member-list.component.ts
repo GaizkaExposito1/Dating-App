@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Member } from 'src/app/_models/members';
+import { Member } from 'src/app/_models/member';
 import { MembersService } from 'src/app/_services/members.service';
 
 @Component({
@@ -15,8 +15,9 @@ export class MemberListComponent implements OnInit {
   ngOnInit(): void {
     this.loadMembers();
   }
-  loadMembers(){
-    this.memberService.getMembers().subscribe(members =>{
+
+  loadMembers() {
+    this.memberService.getMembers().subscribe(members => {
       this.members = members;
     })
   }

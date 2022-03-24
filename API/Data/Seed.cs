@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -14,20 +13,22 @@ namespace API.Data
     {
         public static async Task SeedUsers(DataContext context)
         {
-            if(await context.Users.AnyAsync()) return;
+            if (await context.Users.AnyAsync()) return;
 
-            var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.Json");
-            var users=JsonSerializer.Deserialize<List<AppUser>>(userData);
+            var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
+            var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
+            if (users == null) return;
             foreach (var user in users)
             {
                 using var hmac = new HMACSHA512();
-            
-                user.UserName= user.UserName.ToLower();
-                user.PasswordHash=hmac.ComputeHash(Encoding.UTF8.GetBytes("z"));
-                user.PasswordSalt=hmac.Key; 
 
-                context.Users.Add(user);
+                user.UserName = user.UserName.ToLower();
+                user.PasswordSalt = hmac.Key;
+                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Pa$$w0rd"));
+
+                await context.Users.AddAsync(user);
             }
+
             await context.SaveChangesAsync();
         }
     }
