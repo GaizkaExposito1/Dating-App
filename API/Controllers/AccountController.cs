@@ -15,11 +15,10 @@ namespace API.Controllers
 {
     public class AccountController : BaseApiController
     {
-
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
-        public UserManager<AppUser> _userManager { get; }
-        public SignInManager<AppUser> _signInManager { get; }
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IMapper mapper)
         {
             _signInManager = signInManager;
@@ -39,11 +38,11 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-            if(!result.Succeeded) return BadRequest(result.Errors);
+            if (!result.Succeeded) return BadRequest(result.Errors);
 
             var roleResult = await _userManager.AddToRoleAsync(user, "Member");
 
-            if(!roleResult.Succeeded) return BadRequest(result.Errors);
+            if (!roleResult.Succeeded) return BadRequest(result.Errors);
 
             return new UserDto
             {
@@ -63,9 +62,10 @@ namespace API.Controllers
 
             if (user == null) return Unauthorized("Invalid username");
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            var result = await _signInManager
+                .CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if(!result.Succeeded) return Unauthorized();
+            if (!result.Succeeded) return Unauthorized();
 
             return new UserDto
             {

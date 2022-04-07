@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220404122822_IdentityAdded")]
-    partial class IdentityAdded
+    [Migration("20200918061304_GroupsAdded")]
+    partial class GroupsAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -153,6 +153,34 @@ namespace API.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("API.Entities.Connection", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("GroupName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ConnectionId");
+
+                    b.HasIndex("GroupName");
+
+                    b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("API.Entities.Group", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("API.Entities.Message", b =>
@@ -334,6 +362,13 @@ namespace API.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Entities.Connection", b =>
+                {
+                    b.HasOne("API.Entities.Group", null)
+                        .WithMany("Connections")
+                        .HasForeignKey("GroupName");
                 });
 
             modelBuilder.Entity("API.Entities.Message", b =>
